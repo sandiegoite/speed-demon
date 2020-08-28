@@ -1,11 +1,6 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
-def greeting():
-    i=0
-    welcome = ""
-    for chr in str("Hello world !"):
-        i+= 1
-        welcome += ("\n" + " "* i + chr)
-    return welcome
+def index():
+    return render_template('index.html')
