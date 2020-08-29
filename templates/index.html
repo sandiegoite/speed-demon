@@ -10,8 +10,44 @@
 	</head>
 	<body>
 		<h1>Welcome to Speed Demon!</h1>
-		<div>Maybe a brief explanation of the rules could go here.</div>
-		<div>Eventually we will have a game list here.</div>
-		<div>This page will serve as a lobby of sorts.</div>
+		<p>Maybe a brief explanation of the rules could go here.</p>
+		<div id="game-list"></div>
+		<script type="text/javascript"><!--
+            		function escape(unsafe) {
+            		    return unsafe
+            		            .replace(/&/g, "&amp;")
+            		            .replace(/</g, "&lt;")
+            		            .replace(/>/g, "&gt;")
+            		            .replace(/"/g, "&quot;")
+            		            .replace(/'/g, "&#039;");
+            		}
+            		function process(response) {
+            		    var jsonResponse = JSON.parse(response.responseText);
+            		    if (jsonResponse.length > 0) {
+            		        var gameList = "Active games";
+            		        gameList += "<ul>";
+            		        for (var i = 0; i < jsonResponse.length; i++) {
+            		            var game = jsonResponse[i];
+            		            gameList += "<li>" + escape(game.id) + "</li>";
+            		        }
+            		        gameList += "</ul>";
+            		        var lists = document.querySelectorAll("#game-list");
+            		        for (var i = 0; i < lists.length; i++) {
+            		            var list = lists[i];
+            		            list.innerHTML = gameList;
+            		        }
+            		    }
+            		}
+            		document.addEventListener("DOMContentLoaded", function() {
+            		    var gameListRequest = new XMLHttpRequest();
+            		    gameListRequest.onreadystatechange = function() {
+            		        if (this.readyState == 4 && this.status == 200) {
+            		            process(this);
+            		        }
+            		    };
+            		    gameListRequest.open("GET", "/api/games", true);
+            		    gameListRequest.send();
+            		});
+		--></script>
 	</body>
 </html>
