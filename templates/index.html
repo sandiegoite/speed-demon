@@ -11,6 +11,10 @@
 	<body>
 		<h1>Welcome to Speed Demon!</h1>
 		<p>Maybe a brief explanation of the rules could go here.</p>
+		<form action="/api/games" method="POST">
+			<label>Username: <input type="text" name="owner"></label>
+			<button type="submit">New Game!</button>
+		</form>
 		<div id="game-list"></div>
 		<script type="text/javascript"><!--
             		function escape(unsafe) {
