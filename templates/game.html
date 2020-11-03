@@ -7,10 +7,39 @@
             	    font-family: "Lucida Console", Courier, monospace;
             	}
 		--></style>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js" 
+			integrity="sha512-AcZyhRP/tbAEsXCCGlziPun5iFvcSUpEz2jKkx0blkYKbxU81F+iq8FURwPn1sYFeksJ+sDDrI5XujsqSobWdQ==" 
+			crossorigin="anonymous"></script>
+		<script type="text/javascript"><!--
+			var socket = io();
+			function sendMessage(event) {
+				var message = "";
+				for (var i = 0; i < event.target.elements.length; i++) {
+					var element = event.target.elements[i];
+					if (element.value) {
+						message += element.value;
+					}
+				}
+				socket.emit('message',{game:'{{ game.id }}', message:message});
+				return false;
+			}
+			socket.on('message', function(message) {
+				var messages = document.getElementById("room-messages");
+				messages.innerHTML += message['message'] + '\n';
+			});
+			socket.on('connect', function() {
+				socket.emit('join',{game:'{{ game.id }}'});
+			});
+		--></script>
 	</head>
 	<body>
 		<h1>Speed Demon Game Screen!</h1>
 		<div>ID: {{ game.id }}</div>
 		<div>Owner: {{ game.owner }}</div>
+		<form action="#" onsubmit="return sendMessage(event)">
+			<label>Message: <input type="text" name="message"></label>
+			<button type="submit">Send!</button>
+		</form>
+		<pre id="room-messages"></pre>
 	</body>
 </html>
